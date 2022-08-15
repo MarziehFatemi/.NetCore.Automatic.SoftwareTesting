@@ -10,7 +10,7 @@ namespace Onion.Application.Contracts.ProductApplication_Agg
         bool Activate(int id, out string Error);
         bool DeActivate(int id, out string Error);
         bool Edit(EditProductCommand Command, out string Error);
-        bool Create(CreateProductCommand Command, out string Error);
+        int Create(CreateProductCommand Command, out string Error);
 
 
     }

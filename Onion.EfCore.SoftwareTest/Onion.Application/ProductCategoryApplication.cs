@@ -1,5 +1,6 @@
 ﻿using Onion.Application.Contracts;
 using Onion.Application.Contracts.DataMapping;
+using Onion.Application.Contracts.ProductCategoryApplicationAgg;
 using Onion.Domain.Product_Category_agg;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace Onion.Application
         {
             if (ProductCatecoryRepository.Exist(Command.Name))
             {
-                Error = "نام گروه تکراری است یک نام متفاوت انتخاب کنید";
+                Error = ProductCategoryMessages.RepeatitiveNameError; 
 
                 return 0;
             }
@@ -82,10 +83,13 @@ namespace Onion.Application
 
         public EditProductCategoryCommand GetEntity(int Id)
         {
-            var Command = new EditProductCategoryCommand(Id,
-                ProductCatecoryRepository.Get(Id).Name);
+           
+                var productCategory = ProductCatecoryRepository.Get(Id);
 
-            return Command;
+
+                var Command = new EditProductCategoryCommand(Id, productCategory.Name);
+            
+                return Command;
         }
        
 

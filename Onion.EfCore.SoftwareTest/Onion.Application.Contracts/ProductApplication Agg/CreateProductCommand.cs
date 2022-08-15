@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Onion.Application.Contracts
+namespace Onion.Application.Contracts.ProductApplication_Agg
 {
     public class CreateProductCommand
     {

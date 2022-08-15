@@ -28,14 +28,37 @@ namespace TestApi.Controllers
         }
 
 
+        [HttpGet("{id}")]
+        public EditProductCommand GetProductBy(int id)
+        {
+            string Error = "";
+            bool IsNull = false; 
+            var editProductCommand = _IProductApplication.GetBy(id, out IsNull, out Error);
+
+            //if (IsNull)
+            //{
+            //    throw new Exception(Error);
+
+            //}
+            //else
+                return editProductCommand; 
+
+        }
+
         [HttpPost("CreateProduct")]
         public ResultStatus PostCreateProduct(CreateProductCommand Command)
         {
             string Error = "";
             if (ModelState.IsValid)
             {
-                _ResultStatus.IsOk = _IProductApplication.Create(Command, out Error);
+                _ResultStatus.Id = _IProductApplication.Create(Command, out Error);
                 _ResultStatus.Error = Error;
+                
+                if (_ResultStatus.Id != 0)
+                    _ResultStatus.IsOk = true;
+                else
+                    _ResultStatus.IsOk = false; 
+
             }
             else
             {
@@ -51,8 +74,8 @@ namespace TestApi.Controllers
         [HttpPost("EditProdcut")]
         public ResultStatus PostEditProdcut(EditProductCommand Command)
         {
-
-            _ResultStatus.IsOk = _IProductApplication.Edit(Command, out string Error);
+            string Error = ""; 
+            _ResultStatus.IsOk = _IProductApplication.Edit(Command, out Error);
             _ResultStatus.Error = Error;
             return _ResultStatus;
         }

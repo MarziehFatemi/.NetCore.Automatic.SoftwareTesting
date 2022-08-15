@@ -48,16 +48,24 @@ namespace Onion.Application
 
         }
 
-        public bool Create(CreateProductCommand Command, out string Error)
+        public int Create(CreateProductCommand Command, out string Error)
         {
             if (!_IProductRepository.Exist(Command.Name, Command.CategoryId))
             {
-                _IProductRepository.Create(new Product(Command.UnitPrice, Command.Name, Command.CategoryId));
-                return _IProductRepository.SaveChanges(out Error);
+                var Product = new Product(Command.UnitPrice, Command.Name, Command.CategoryId); 
+                _IProductRepository.Create(Product);
+                if( _IProductRepository.SaveChanges(out Error))
+                {
+                    return Product.Id;
+                }
+                else
+                {
+                    return 0;
+                }
             }
             {
                 Error = "نام و گروه محصول تکراری است. ";
-                return false; 
+                return 0; 
             }
 
         }

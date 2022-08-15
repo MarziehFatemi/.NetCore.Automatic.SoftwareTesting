@@ -33,8 +33,8 @@ namespace TestApi.Controllers
         [HttpPost("EditProdcutCategory")]
         public ResultStatus PostEditProdcutCategory(EditProductCategoryCommand Command)
         {
-
-            _ResultStatus.IsOk = _IProductCategoryApplication.Edit(Command, out string Error);
+            string Error = "";
+            _ResultStatus.IsOk = _IProductCategoryApplication.Edit(Command, out Error);
             _ResultStatus.Error = Error;
             return _ResultStatus;
         }

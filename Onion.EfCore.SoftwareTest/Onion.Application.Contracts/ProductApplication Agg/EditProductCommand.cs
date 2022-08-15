@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 
-namespace Onion.Application.Contracts
+namespace Onion.Application.Contracts.ProductApplication_Agg
 {
     public  class EditProductCommand: CreateProductCommand
     {

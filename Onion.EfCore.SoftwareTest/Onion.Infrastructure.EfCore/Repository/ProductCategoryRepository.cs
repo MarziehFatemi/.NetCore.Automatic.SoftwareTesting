@@ -1,4 +1,5 @@
 ﻿using Onion.Domain.Product_Category_agg;
+using Onion_Domain.Product_agg.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,25 +28,36 @@ namespace Onion.Infrastructure.EfCore.Repository
 
         public ProductCategory Get(int id)
         {
-            return _context.productCategories.Find(id); 
-                
-            //FirstOrDefault(c => c.Id == id);
+            var productCategory = _context.productCategories.Find(id);
+            if (productCategory == null)
+                throw new ProductCategoryIdIsInvalidException(); 
+
+             return productCategory; 
+          
         }
 
         public bool Edit (int id, string Name, out string Error)
         {
-            var category = Get(id);
-            if (category != null)
+            try
             {
-                category.Edit(Name);
-                _context.productCategories.Update(category);
-                Error = "با موفقیت ویرایش شد";
-                return true;
+                var category = Get(id);
+                if (category != null)
+                {
+                    category.Edit(Name);
+                    _context.productCategories.Update(category);
+                    Error = "با موفقیت ویرایش شد";
+                    return true;
+                }
+                else
+                {
+                    Error = " داده مزبور یافت نشد، موجود نیست";
+                    return false;
+                }
             }
-            else
+            catch
             {
                 Error = " داده مزبور یافت نشد، موجود نیست";
-                return false; 
+                return false;
             }
 
         }
