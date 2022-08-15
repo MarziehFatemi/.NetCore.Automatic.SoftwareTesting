@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Onion.Application.Contracts\Onion.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Onion.Application\Onion.Application.csproj" />
+    <ProjectReference Include="..\Onion.Infrastructure.EfCore\Onion.Infrastructure.EfCore.csproj" />
+  </ItemGroup>
+
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="Onion.PresentationApi.Tests.Integration" />
+	</ItemGroup>
+	
+
+</Project>
