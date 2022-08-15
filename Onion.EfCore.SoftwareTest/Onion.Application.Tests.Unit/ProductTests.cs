@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Onion_Domain.Product_agg.Exceptions
+namespace Onion.Application.Tests.Unit
 {
-    public class ProductCategoryIdIsInvalidException : Exception
+    internal class ProductTests
     {
-
     }
 }

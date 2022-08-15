@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Onion.Domain.Product_agg;
+using Onion_Domain.Product_agg.Exceptions;
 
 namespace Onion.Infrastructure.EfCore.Repository
 {
@@ -17,45 +18,30 @@ namespace Onion.Infrastructure.EfCore.Repository
             _context.Add(product); 
         }
 
-        public Product Get(int id, out bool IsNull, out string Error)
+        public Product Get(int id)
         {
-            IsNull = false;
+           
             
             var product = _context.products
                 .Include(c => c.Category)
                 .FirstOrDefault(c => c.Id == id);
             if (product == null)
             {
-                IsNull = true;
-                Error = "داده مزبور موجود نیست";
+                throw new ProductIdIsInvalidException(); 
             }
-            else
-            {
-                Error = "داده با موفقیت دریافت شد"; 
-            }
-        #pragma warning disable CS8603 // Possible null reference return.
+               
             return product;
-         #pragma warning restore CS8603 // Possible null reference return.
+        
         }
 
         public bool Exist ( string name, int Categoryid)
         {
             return _context.products.Any(c => c.Name == name && c.CategoryId == Categoryid); 
         }
-        public bool SaveChanges(out string Error)
+        public void SaveChanges()
         {
-            try
-            {
                 _context.SaveChanges();
-                Error = "با موفقیت ذخیره شد";
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Error = ex.ToString();
-                return false;
-
-            }
+               
         }
 
 
@@ -88,23 +74,23 @@ namespace Onion.Infrastructure.EfCore.Repository
         }
         
 
-        public bool Edit(int id, int UnitPrice, string Name, int CategoryId, out string Error)
+        public bool Edit(int id, int UnitPrice, string Name, int CategoryId)
         {
-            bool IsNull = false;
-            
-            var Product = Get( id,out IsNull,out Error ); 
-
-            if (!IsNull)
+            try
             {
+                var Product = Get(id);
+
                 Product.Edit(UnitPrice, Name, CategoryId);
                 _context.products.Update(Product);
-                Error = "با موفقیت ویرایش شد";
-                return true; 
+                
+                return true;
             }
-            else
+            catch 
             {
-                return false; 
+                throw new ProductIdIsInvalidException();  
+                
             }
+            
 
         }
     }

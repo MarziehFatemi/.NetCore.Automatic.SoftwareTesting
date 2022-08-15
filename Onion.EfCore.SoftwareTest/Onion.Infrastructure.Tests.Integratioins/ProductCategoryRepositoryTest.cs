@@ -10,7 +10,7 @@ namespace Onion.Infrastructure.Tests.Integratioins
 {
     public class ProductCategoryRepositoryTest : IClassFixture<RealDatabaseFixture>
     {
-        private readonly ProductCategoryTestBuilder productCategoryTestBuilder; 
+        
         private readonly ProductCategoryRepository productCategoryRepository;
 
         private ProductCategory productCategorySeed = new ProductCategory("Industrial Machine");
@@ -46,7 +46,7 @@ namespace Onion.Infrastructure.Tests.Integratioins
             //act 
 
             productCategoryRepository.Create(productCategorySeed);
-            productCategoryRepository.SaveChanges(out string Error);
+            productCategoryRepository.SaveChanges();
             var Actual = productCategoryRepository.GetAll();
 
             // assert 
@@ -74,7 +74,7 @@ namespace Onion.Infrastructure.Tests.Integratioins
             Action Actual = () => productCategoryRepository.Get(id);
 
 
-            Actual.Should().ThrowExactly<ProductCategoryIdIsInvalidException>();
+            Actual.Should().ThrowExactly<ProductIdIsInvalidException>();
         }
 
         [Theory]
@@ -85,7 +85,7 @@ namespace Onion.Infrastructure.Tests.Integratioins
 
             Action Actual = () => productCategoryRepository.Get(id);
 
-            Actual.Should().ThrowExactly<ProductCategoryIdIsInvalidException>(); 
+            Actual.Should().ThrowExactly<ProductIdIsInvalidException>(); 
           
         }
 
@@ -96,7 +96,7 @@ namespace Onion.Infrastructure.Tests.Integratioins
 
             // Act 
             productCategoryRepository.Create(productCategorySeed);
-            productCategoryRepository.SaveChanges(out string Error);
+            productCategoryRepository.SaveChanges();
 
             var Actual = productCategoryRepository.Exist(productCategorySeed.Name);
 
@@ -110,10 +110,10 @@ namespace Onion.Infrastructure.Tests.Integratioins
         {
             string Error = "";
             productCategoryRepository.Create(productCategorySeed);
-            productCategoryRepository.SaveChanges(out  Error);
+            productCategoryRepository.SaveChanges();
 
            var Actual= productCategoryRepository.Edit(productCategorySeed.Id, ExpectedName);
-            productCategoryRepository.SaveChanges(out Error);
+            productCategoryRepository.SaveChanges();
 
 
             Actual.Should().BeTrue();
@@ -126,7 +126,6 @@ namespace Onion.Infrastructure.Tests.Integratioins
 
         [Theory]
         [InlineData(0)]
-        [InlineData(100)]
         [InlineData(-1)]
         public void Edit_Should_ThrowException_WhenIdIsInvalid(int Id)
         {
@@ -134,7 +133,7 @@ namespace Onion.Infrastructure.Tests.Integratioins
             Action Actual = () => productCategoryRepository.Edit(Id, "SomeUpdatedName");
 
            
-            Actual.Should().ThrowExactly<ProductCategoryIdIsInvalidException>();
+            Actual.Should().ThrowExactly<ProductIdIsInvalidException>();
 
 
         }

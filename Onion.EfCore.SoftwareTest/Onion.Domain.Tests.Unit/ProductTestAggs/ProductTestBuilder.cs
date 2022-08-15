@@ -11,7 +11,7 @@ namespace Onion.Domain.Tests.ProductTestAggs
     {
        public int UintPrice { get; private set; } = 1100;
        public string Name { get; private set; } = "Think and  grow rich";
-       public int CategoryId { get; private set; } = 1;
+       public int CategoryId { get; private set; } = 2;
 
         public ProductTestBuilder WithUnitPrice (int unitPrice)
         {

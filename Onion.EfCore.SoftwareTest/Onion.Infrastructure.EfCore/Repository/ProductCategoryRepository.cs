@@ -25,12 +25,12 @@ namespace Onion.Infrastructure.EfCore.Repository
         public ProductCategory Get(int id)
         {
             if (id <= 0)
-                throw new ProductCategoryIdIsInvalidException();
+                throw new ProductIdIsInvalidException();
             else
             {
                 var productCategory = _context.productCategories.Find(id);
                 if (productCategory == null)
-                    throw new ProductCategoryIdIsInvalidException();
+                    throw new ProductIdIsInvalidException();
 
                 return productCategory;
             }
@@ -48,35 +48,26 @@ namespace Onion.Infrastructure.EfCore.Repository
             }
             catch
             {
-                throw new ProductCategoryIdIsInvalidException();
+                throw new ProductIdIsInvalidException();
             }
 
             
 
         }
-        public bool SaveChanges(out string Error)
+        public void SaveChanges()
         {
-            try
-            {
+            
                 _context.SaveChanges();
-                Error = "با موفقیت ذخیره شد";
-                return true; 
-            }
-            catch (Exception ex)
-            {
-                Error = ex.ToString();
-                return false; 
-
-            }
+              
         }
 
-        public List<ProductCategory> Search(string name)
-        {
-            return _context.productCategories
-                .Where(c=> c.Name.Contains(name))
-                .OrderBy(c => c.Id)
-                .ToList(); 
-        }
+        ////public List<ProductCategory> Search(string name)
+        ////{
+        ////    return _context.productCategories
+        ////        .Where(c=> c.Name.Contains(name))
+        ////        .OrderBy(c => c.Id)
+        ////        .ToList(); 
+        ////}
 
         public List<ProductCategory> GetAll()
         {

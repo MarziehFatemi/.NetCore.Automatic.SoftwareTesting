@@ -31,14 +31,18 @@ namespace Onion.Application
             else
             {
                 var PCategory = new ProductCategory(Command.Name);
+                try
+                { 
                 ProductCatecoryRepository.Create(PCategory);
-                if (ProductCatecoryRepository.SaveChanges(out Error))
-                {
+                    ProductCatecoryRepository.SaveChanges();
+                
                     Error = "با موفقیت ذخیره شد";
                     return PCategory.Id;
                 }
-                else
+                catch (Exception ex)
                 {
+                    Error = ex.Message.ToString(); 
+
                     return 0;
                 }
             }
@@ -47,32 +51,34 @@ namespace Onion.Application
         public bool Edit(EditProductCategoryCommand Command, out string Error)
         {
             Error = "";
-           if ( ProductCatecoryRepository.Edit(Command.Id, Command.Name))
+
+            try
             {
-                if (ProductCatecoryRepository.SaveChanges(out Error))
+
+                ProductCatecoryRepository.Edit(Command.Id, Command.Name);
+
+                ProductCatecoryRepository.SaveChanges();
+
+                Error = "با موفقیت انجام شد";
+                return true;
+            }
+             catch (Exception e)  
                 {
-                    return true;
-                }
-                else
-                {
+                Error = e.Message.ToString();
                     return false;
                 }
-            }
-           else
-            {
-                return false; 
-            }
+           
            
 
 
         }
 
-        public List<ProductCategoryViewModel> Search(string name)
-        {
-            return DataMapping.ProdCatList2ProdCatViewList(ProductCatecoryRepository.Search(name));
+        ////public List<ProductCategoryViewModel> Search(string name)
+        ////{
+        ////    return DataMapping.ProdCatList2ProdCatViewList(ProductCatecoryRepository.Search(name));
 
 
-        }
+        ////}
 
         public List<ProductCategoryViewModel> GetAll()
         {

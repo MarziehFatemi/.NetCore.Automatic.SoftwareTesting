@@ -47,6 +47,15 @@ namespace Onion.Domain.Tests.ProductCategoryTestAggs
         }
 
 
+
+
+        public void Dispose()
+        {
+            
+        }
+
+
+
         //[Theory]
         //[InlineData(null)]
         //[InlineData("")]
@@ -71,12 +80,6 @@ namespace Onion.Domain.Tests.ProductCategoryTestAggs
 
 
         //}
-
-
-        public void Dispose()
-        {
-            
-        }
 
 
 

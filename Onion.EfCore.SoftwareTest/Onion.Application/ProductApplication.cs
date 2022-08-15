@@ -20,31 +20,45 @@ namespace Onion.Application
         }
         public bool Activate(int id, out string Error)
         {
-            bool IsNull = false;
-            var product = _IProductRepository.Get(id, out IsNull,out Error);
-            if (IsNull)
-            {             
-                return false;
+           
+            try
+            {
+                var product = _IProductRepository.Get(id);
+
+                _IProductRepository.Activate(product);
+                
+                _IProductRepository.SaveChanges();
+                Error = "با موفقیت انجام شد";
+                return true; 
+            }
+            catch (Exception ex)
+            {
+                
+                Error = ex.Message.ToString();
+                return false; 
 
             }
-
-            _IProductRepository.Activate(product);
-           return  _IProductRepository.SaveChanges(out Error); 
 
 
         }
         public bool DeActivate(int id, out string Error)
         {
-            bool IsNull = false;
-            var product = _IProductRepository.Get(id, out IsNull, out Error);
-            if (IsNull)
+            
+            try
             {
+                var product = _IProductRepository.Get(id);
+
+                _IProductRepository.DeActivate(product);
+                 _IProductRepository.SaveChanges();
+                Error = "با موفقیت انجام شد";
+                return true; 
+            }
+            catch (Exception e)
+            {
+                Error = e.Message.ToString(); 
                 return false; 
 
             }
-            
-            _IProductRepository.DeActivate(product);
-            return _IProductRepository.SaveChanges(out Error);
 
         }
 
@@ -52,14 +66,19 @@ namespace Onion.Application
         {
             if (!_IProductRepository.Exist(Command.Name, Command.CategoryId))
             {
-                var Product = new Product(Command.UnitPrice, Command.Name, Command.CategoryId); 
-                _IProductRepository.Create(Product);
-                if( _IProductRepository.SaveChanges(out Error))
+                var Product = new Product(Command.UnitPrice, Command.Name, Command.CategoryId);
+
+                try
                 {
-                    return Product.Id;
+                    _IProductRepository.Create(Product);
+                    _IProductRepository.SaveChanges();
+                    Error = "با موفقیت انجام شد";
+                  return Product.Id;
                 }
-                else
+                catch(Exception e)
+               
                 {
+                    Error = e.Message.ToString(); 
                     return 0;
                 }
             }
@@ -75,12 +94,17 @@ namespace Onion.Application
         public bool Edit(EditProductCommand Command, out string Error)
         {
             
-            if (_IProductRepository.Edit(Command.Id, Command.UnitPrice, Command.Name, Command.CategoryId, out Error))
+            try
             {
-                return _IProductRepository.SaveChanges(out Error);
+                _IProductRepository.Edit(Command.Id, Command.UnitPrice, Command.Name, Command.CategoryId);
+            
+                _IProductRepository.SaveChanges();
+                Error = "با موفقیت انجام شد";
+                return true;
             }
+            catch (Exception e )
             {
-
+                Error = e.Message.ToString(); 
                 return false; 
             }
 
@@ -101,12 +125,19 @@ namespace Onion.Application
 
         public EditProductCommand GetBy(int id,out bool IsNull, out string Error)
         {
-             
-            var product = _IProductRepository.Get(id, out IsNull, out Error);
-             if (!IsNull)
-            { return DataMapping.Product2EditProduct(product); }
-             else
+            try
             {
+                var product = _IProductRepository.Get(id);
+                IsNull = false;
+                Error = "OK";
+                return DataMapping.Product2EditProduct(product);
+
+            }
+
+            catch (Exception ex)
+            {
+                Error = ex.Message.ToString();
+                IsNull = true; 
                 return new EditProductCommand();
             }
             
