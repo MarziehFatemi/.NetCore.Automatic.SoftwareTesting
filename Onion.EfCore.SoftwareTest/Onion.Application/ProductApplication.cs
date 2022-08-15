@@ -64,7 +64,7 @@ namespace Onion.Application
                 }
             }
             {
-                Error = "نام و گروه محصول تکراری است. ";
+                Error = ProductMessages.RepeatitiveProduct; 
                 return 0; 
             }
 

@@ -1,10 +1,6 @@
 ﻿using Onion.Domain.Product_Category_agg;
 using Onion_Domain.Product_agg.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Onion.Infrastructure.EfCore.Repository
 {
@@ -28,37 +24,34 @@ namespace Onion.Infrastructure.EfCore.Repository
 
         public ProductCategory Get(int id)
         {
-            var productCategory = _context.productCategories.Find(id);
-            if (productCategory == null)
-                throw new ProductCategoryIdIsInvalidException(); 
+            if (id <= 0)
+                throw new ProductCategoryIdIsInvalidException();
+            else
+            {
+                var productCategory = _context.productCategories.Find(id);
+                if (productCategory == null)
+                    throw new ProductCategoryIdIsInvalidException();
 
-             return productCategory; 
+                return productCategory;
+            }
           
         }
 
-        public bool Edit (int id, string Name, out string Error)
+        public bool Edit (int id, string Name)
         {
             try
             {
                 var category = Get(id);
-                if (category != null)
-                {
-                    category.Edit(Name);
-                    _context.productCategories.Update(category);
-                    Error = "با موفقیت ویرایش شد";
-                    return true;
-                }
-                else
-                {
-                    Error = " داده مزبور یافت نشد، موجود نیست";
-                    return false;
-                }
+                category.Edit(Name);
+                _context.productCategories.Update(category);
+                return true;
             }
             catch
             {
-                Error = " داده مزبور یافت نشد، موجود نیست";
-                return false;
+                throw new ProductCategoryIdIsInvalidException();
             }
+
+            
 
         }
         public bool SaveChanges(out string Error)

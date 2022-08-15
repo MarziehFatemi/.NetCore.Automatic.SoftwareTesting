@@ -50,7 +50,7 @@ namespace Onion.PresentationApi.Tests.Integration
             var actual = await _restClient.GetContentAsync<EditProductCommand>($"{ListPath}/{Id}");
 
             
-            
+            // Assert
             actual.Id.Should().BeGreaterThan(0);
             
 
@@ -58,51 +58,30 @@ namespace Onion.PresentationApi.Tests.Integration
 
 
         [Fact]
-        public async void Should_CreateNewProduct()
+        public  void Should_CreateNewProduct()
         {
             //arrange
-
-            var command = new CreateProductCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-                CategoryId = 2, // there are some unavailable category Ids!!! 
-                UnitPrice = 110,
-
-            };
-
-
-
-            //act
-            var resultStatus = await _restClient.PostContentAsync<CreateProductCommand, ResultStatus>(CreatePath, command);
+            var resultStatus =  CreateSampleProductToTest();
 
 
             //assert
-            resultStatus.IsOk.Should().BeTrue();
+            resultStatus.Result.IsOk.Should().BeTrue();
         }
 
 
         [Fact]
         public async void Should_Edit_Product()
         {
+           
             //arrange
-
-            var CreateCommand = new CreateProductCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-                CategoryId = 2, // there are some unavailable category Ids!!! 
-                UnitPrice = 110,
-
-            };
-
-            var resultStatus = await _restClient.PostContentAsync<CreateProductCommand, ResultStatus>(CreatePath, CreateCommand);
+            var resultStatus = CreateSampleProductToTest();
 
             var EditCommand = new EditProductCommand()
             {
                 Id = resultStatus.Id,
-                CategoryId = CreateCommand.CategoryId,
 
-
-                // Editting name and price 
+                // Editting name and price
+                CategoryId = 2,
                 UnitPrice = new Random().Next(1, 2000),
                 Name = Guid.NewGuid().ToString(),
             }; 
@@ -124,17 +103,10 @@ namespace Onion.PresentationApi.Tests.Integration
         [Fact]
         public async void Should_DeActivate_Product()
         {
+          
             //arrange
+            var resultStatus = CreateSampleProductToTest();
 
-            var CreateCommand = new CreateProductCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-                CategoryId = 2, // there are some unavailable category Ids!!! 
-                UnitPrice = 110,
-
-            };
-
-            var resultStatus = await _restClient.PostContentAsync<CreateProductCommand, ResultStatus>(CreatePath, CreateCommand);
 
             //act 
             var actual = await _restClient.GetContentAsync< ResultStatus >($"{DeActivatePath}/{resultStatus.Id}");
@@ -148,16 +120,7 @@ namespace Onion.PresentationApi.Tests.Integration
         public async void Should_Activate_Product()
         {
             //arrange
-
-            var CreateCommand = new CreateProductCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-                CategoryId = 2, // there are some unavailable category Ids!!! 
-                UnitPrice = 110,
-
-            };
-
-            var resultStatus = await _restClient.PostContentAsync<CreateProductCommand, ResultStatus>(CreatePath, CreateCommand);
+            var resultStatus = CreateSampleProductToTest();
 
             //act 
             var actual = await _restClient.GetContentAsync<ResultStatus>($"{ActivatePath}/{resultStatus.Id}");
@@ -167,6 +130,25 @@ namespace Onion.PresentationApi.Tests.Integration
 
         }
 
+
+
+        public async Task<ResultStatus> CreateSampleProductToTest()
+        {
+            var command = new CreateProductCommand()
+            {
+                Name = Guid.NewGuid().ToString(),
+                CategoryId = 2, // there are some unavailable category Ids!!! 
+                UnitPrice = 110,
+
+            };
+
+
+
+            //act
+            var resultStatus = await _restClient.PostContentAsync<CreateProductCommand, ResultStatus>(CreatePath, command);
+
+            return resultStatus; 
+        }
         //[Fact]
         //public async void Should_Not_CreateRepeatitiveProductCategory_AndReturnMessage()
         //{

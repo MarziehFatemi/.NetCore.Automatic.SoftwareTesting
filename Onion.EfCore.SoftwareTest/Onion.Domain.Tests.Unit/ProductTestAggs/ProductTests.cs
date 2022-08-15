@@ -54,6 +54,28 @@ namespace Onion.Domain.Tests.ProductTestAggs
         }
 
 
+        [Fact]
+        public void DeActivate_ShouldChange_IsRemoved_2true()
+        {
+            var product = productTestBuilder.Build();
+
+            product.DeActivate();
+
+            product.IsRemoved.Should().BeTrue();
+
+        }
+
+        [Fact]
+        public void Activate_ShouldChange_IsRemoved_2false()
+        {
+            var product = productTestBuilder.Build();
+
+            product.Activate();
+
+            product.IsRemoved.Should().BeFalse();
+
+        }
+
         ////[Fact]
         ////public void Should_ThrowException_When_NameAndProductId_Is_Repeated()
         ////{

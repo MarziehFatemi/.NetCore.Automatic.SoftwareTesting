@@ -46,7 +46,8 @@ namespace Onion.Application
 
         public bool Edit(EditProductCategoryCommand Command, out string Error)
         {
-           if ( ProductCatecoryRepository.Edit(Command.Id, Command.Name, out Error))
+            Error = "";
+           if ( ProductCatecoryRepository.Edit(Command.Id, Command.Name))
             {
                 if (ProductCatecoryRepository.SaveChanges(out Error))
                 {
