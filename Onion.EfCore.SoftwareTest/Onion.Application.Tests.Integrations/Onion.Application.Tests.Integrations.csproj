@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Onion.Application\Onion.Application.csproj" />
     <ProjectReference Include="..\Onion.Domain.Tests.Unit\Onion.Domain.Tests.Unit.csproj" />
+    <ProjectReference Include="..\Onion.Infrastructure.Tests.Integratioins\Onion.Infrastructure.Tests.Integratioins.csproj" />
   </ItemGroup>
 
 </Project>

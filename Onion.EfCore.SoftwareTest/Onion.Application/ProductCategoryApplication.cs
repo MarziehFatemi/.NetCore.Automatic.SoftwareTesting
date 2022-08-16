@@ -33,10 +33,10 @@ namespace Onion.Application
                 var PCategory = new ProductCategory(Command.Name);
                 try
                 { 
-                ProductCatecoryRepository.Create(PCategory);
+                    ProductCatecoryRepository.Create(PCategory);
                     ProductCatecoryRepository.SaveChanges();
-                
-                    Error = "با موفقیت ذخیره شد";
+
+                    Error = ProductCategoryMessages.SuccessfullCreation;
                     return PCategory.Id;
                 }
                 catch (Exception ex)
@@ -88,15 +88,22 @@ namespace Onion.Application
         }
 
 
-        public EditProductCategoryCommand GetEntity(int Id)
+        public EditProductCategoryCommand GetEntity(int Id, out string Error )
         {
-           
+            try
+            {
                 var productCategory = ProductCatecoryRepository.Get(Id);
 
 
                 var Command = new EditProductCategoryCommand(Id, productCategory.Name);
-            
+                Error = ProductCategoryMessages.SuccessfullGet;
                 return Command;
+            }
+            catch (Exception e)
+            {
+                Error = e.Message.ToString();
+                return null;
+            }
         }
        
 

@@ -27,7 +27,8 @@ namespace TestApi.Controllers
         [HttpGet("{id}")]
         public EditProductCategoryCommand GetProductCategory(int id)
         {
-            return _IProductCategoryApplication.GetEntity(id);
+            string Error = "";
+            return _IProductCategoryApplication.GetEntity(id, out Error);
 
         }
         [HttpPost("EditProdcutCategory")]

@@ -1,12 +1,7 @@
-﻿using Onion.Application.Contracts;
-using Onion.Application.Contracts.DataMapping;
+﻿using Onion.Application.Contracts.DataMapping;
 using Onion.Application.Contracts.ProductApplication_Agg;
 using Onion.Domain.Product_agg;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Onion.Application
 {
@@ -28,7 +23,7 @@ namespace Onion.Application
                 _IProductRepository.Activate(product);
                 
                 _IProductRepository.SaveChanges();
-                Error = "با موفقیت انجام شد";
+                Error = ProductMessages.SuccessfullActivation;
                 return true; 
             }
             catch (Exception ex)
@@ -50,7 +45,7 @@ namespace Onion.Application
 
                 _IProductRepository.DeActivate(product);
                  _IProductRepository.SaveChanges();
-                Error = "با موفقیت انجام شد";
+                Error = Error = ProductMessages.SuccessfullDeActivation;
                 return true; 
             }
             catch (Exception e)
@@ -72,7 +67,7 @@ namespace Onion.Application
                 {
                     _IProductRepository.Create(Product);
                     _IProductRepository.SaveChanges();
-                    Error = "با موفقیت انجام شد";
+                    Error = ProductMessages.SuccessfullCreation;
                   return Product.Id;
                 }
                 catch(Exception e)
@@ -99,7 +94,7 @@ namespace Onion.Application
                 _IProductRepository.Edit(Command.Id, Command.UnitPrice, Command.Name, Command.CategoryId);
             
                 _IProductRepository.SaveChanges();
-                Error = "با موفقیت انجام شد";
+                Error = ProductMessages.SuccessfullEdit; 
                 return true;
             }
             catch (Exception e )
@@ -123,13 +118,13 @@ namespace Onion.Application
           return DataMapping.ProductList2ProductViewModelList(products); 
         }
 
-        public EditProductCommand GetBy(int id,out bool IsNull, out string Error)
+        public EditProductCommand GetBy(int id, out string Error)
         {
             try
             {
                 var product = _IProductRepository.Get(id);
-                IsNull = false;
-                Error = "OK";
+              
+                Error = ProductMessages.SuccessfullGet;
                 return DataMapping.Product2EditProduct(product);
 
             }
@@ -137,8 +132,7 @@ namespace Onion.Application
             catch (Exception ex)
             {
                 Error = ex.Message.ToString();
-                IsNull = true; 
-                return new EditProductCommand();
+                return null;
             }
             
             

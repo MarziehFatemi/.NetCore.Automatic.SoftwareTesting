@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Onion.Domain.Product_Category_agg
 {
-    public class ProductCategoryNameIsInvalidException : Exception
+    public class ProductCategoryNameIsRepeatitiveException : Exception
     {
     }
 }

@@ -93,6 +93,7 @@ namespace Onion.PresentationAPI.Tests.Unit
         {
             //arrange 
             int id = 2;
+            string Error = "";
 
 
             // act 
@@ -100,7 +101,7 @@ namespace Onion.PresentationAPI.Tests.Unit
 
             // Assert
 
-            Service.Received().GetEntity(id);
+            Service.Received().GetEntity(id, out Error);
         }
     }
 }

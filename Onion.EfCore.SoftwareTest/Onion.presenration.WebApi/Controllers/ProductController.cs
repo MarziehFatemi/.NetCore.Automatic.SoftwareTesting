@@ -32,8 +32,8 @@ namespace TestApi.Controllers
         public EditProductCommand GetProductBy(int id)
         {
             string Error = "";
-            bool IsNull = false; 
-            var editProductCommand = _IProductApplication.GetBy(id, out IsNull, out Error);
+            
+            var editProductCommand = _IProductApplication.GetBy(id ,out Error);
 
             //if (IsNull)
             //{

@@ -92,7 +92,35 @@ namespace Onion.PresentationAPI.Tests.Unit
         }
 
 
-        
+        [Theory]
+        [InlineData(2)]
+        public void Should_DeActivate_Product(int Id)
+        {
+            //act 
+            Controller.GetDeActivate(Id);
+
+            string Error = "";
+            //assert
+            Service.Received().DeActivate(Id, out Error); 
+
+
+        }
+
+        [Theory]
+        [InlineData(2)]
+        public void Should_Activate_Product(int Id)
+        {
+            //act 
+            Controller.GetActivate(Id);
+
+            string Error = "";
+            //assert
+            Service.Received().Activate(Id, out Error);
+
+
+        }
+
+
 
     }
 }

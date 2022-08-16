@@ -57,7 +57,7 @@ namespace Onion.Infrastructure.Tests.Integratioins
         
         [Theory]
         [InlineData(2)]
-        public void Should_GetCourseByIdWhenIdIsInRange(int id)
+        public void Should_GetProductCategoryByIdWhenIdIsInRange(int id)
         {
 
             var Actual =  productCategoryRepository.Get(id);

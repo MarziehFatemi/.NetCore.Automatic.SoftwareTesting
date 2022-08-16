@@ -51,7 +51,7 @@ namespace Onion.Infrastructure.Tests.Integratioins
 
         [Theory]
         [InlineData(2)]
-        public void Should_GetCourseByIdWhenIdIsInRange(int id)
+        public void Should_GetProductByIdWhenIdIsInRange(int id)
         {
 
             var Actual = _productRepository.Get(id);
@@ -96,6 +96,34 @@ namespace Onion.Infrastructure.Tests.Integratioins
             var Actual = _productRepository.Exist(Product.Name,Product.CategoryId);
 
             Actual.Should().BeTrue();
+        }
+
+        [Fact]
+        public void Exit_Should_ReturnFalse_WhenCategoryIdisTheSameButNameIsDifferent()
+        {
+            // arrange 
+            var Product = productTestBuilder.Build();
+            // Act 
+            _productRepository.Create(Product);
+            _productRepository.SaveChanges();
+
+            var Actual = _productRepository.Exist(Guid.NewGuid().ToString(), Product.CategoryId);
+
+            Actual.Should().BeFalse();
+        }
+
+        [Fact]
+        public void Exit_Should_ReturnFalse_WhenCategoryIdisDifferentButNameIsTheSame()
+        {
+            // arrange 
+            var Product = productTestBuilder.Build();
+            // Act 
+            _productRepository.Create(Product);
+            _productRepository.SaveChanges();
+
+            var Actual = _productRepository.Exist( Product.Name,Product.Id+1);
+
+            Actual.Should().BeFalse();
         }
 
 
