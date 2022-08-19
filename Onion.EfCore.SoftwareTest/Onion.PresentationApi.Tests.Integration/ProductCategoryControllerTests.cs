@@ -12,8 +12,10 @@ namespace Onion.PresentationApi.Tests.Integration
 
         private string ListPath = "/api/ProductCategory";
         private string CreatePath = "/api/ProductCategory/CreateProductCategory";
-        private string EditPath = "/api/ProductCategory/EditProdcutCategory"; 
-        private  RESTFulApiFactoryClient _restClient;
+        private string EditPath = "/api/ProductCategory/EditProdcutCategory";
+        private string RemovePath = "/api/ProductCategory/Remove";
+
+        private RESTFulApiFactoryClient _restClient;
 
         public ProductCategoryControllerTests()
         {
@@ -33,6 +35,7 @@ namespace Onion.PresentationApi.Tests.Integration
 
             //assert
             actual.Should().HaveCountGreaterOrEqualTo(0);
+            actual.Should().BeOfType<List<ProductCategoryViewModel>>();
 
         }
 
@@ -129,6 +132,38 @@ namespace Onion.PresentationApi.Tests.Integration
             ResultStatus2.Error.Should().Be(ProductCategoryMessages.RepeatitiveNameError);
            
             // await _restClient.DeleteContentAsync($"{ListPath}/{id}");
+        }
+
+        [Fact]
+        public async void Should_Delete_Product()
+        {
+
+            var command = new CreateProductCategoryCommand()
+            {
+                Name = Guid.NewGuid().ToString(),
+            };
+
+
+
+            //act
+            var ResultStatus = await _restClient.PostContentAsync<CreateProductCategoryCommand, ResultStatus>(CreatePath, command);
+
+
+            //act 
+
+            var actual = await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{ResultStatus.Id}");
+
+
+
+            //assert
+            actual.Error.Should().Be(ProductCategoryMessages.SuccessfullyDeleted);
+            actual.IsOk.Should().BeTrue();
+
+
+            //act and assert 2
+            var DeletedFromTestActual = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ListPath}/{ResultStatus.Id}");
+            DeletedFromTestActual.Should().BeNull();
+
         }
 
 

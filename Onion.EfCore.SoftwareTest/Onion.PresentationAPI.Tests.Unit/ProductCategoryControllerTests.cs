@@ -71,6 +71,20 @@ namespace Onion.PresentationAPI.Tests.Unit
 
         }
 
+        [Theory]
+        [InlineData(4)]
+        public void Should_Delete_Product(int Id)
+        {
+            //act 
+            Controller.GetRemove(Id);
+
+            string Error = "";
+            //assert
+            Service.Received().Delete(Id, out Error);
+
+
+        }
+
         [Fact]
         public void Should_Edit_Existing_ProductCategory()
         {

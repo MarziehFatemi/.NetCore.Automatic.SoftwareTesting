@@ -13,6 +13,7 @@ namespace Onion.PresentationApi.Tests.Integration
         private string EditPath = "/api/Product/EditProdcut";
         private string DeActivatePath = "/api/Product/DeActivate";
         private string ActivatePath = "/api/Product/Activate";
+        private string RemovePath = "/api/Product/Remove";
 
         private RESTFulApiFactoryClient _restClient;
 
@@ -61,11 +62,11 @@ namespace Onion.PresentationApi.Tests.Integration
         public  void Should_CreateNewProduct()
         {
             //arrange
-            var resultStatus =  CreateSampleProductToTest();
+            var resultStatus =  CreateSampleProductToTest().Result;
 
 
             //assert
-            resultStatus.Result.IsOk.Should().BeTrue();
+            resultStatus.IsOk.Should().BeTrue();
         }
 
 
@@ -74,7 +75,7 @@ namespace Onion.PresentationApi.Tests.Integration
         {
            
             //arrange
-            var resultStatus = CreateSampleProductToTest();
+            var resultStatus = CreateSampleProductToTest().Result;
 
             var EditCommand = new EditProductCommand()
             {
@@ -105,7 +106,7 @@ namespace Onion.PresentationApi.Tests.Integration
         {
           
             //arrange
-            var resultStatus = CreateSampleProductToTest();
+            var resultStatus = CreateSampleProductToTest().Result;
 
 
             //act 
@@ -120,7 +121,7 @@ namespace Onion.PresentationApi.Tests.Integration
         public async void Should_Activate_Product()
         {
             //arrange
-            var resultStatus = CreateSampleProductToTest();
+            var resultStatus = CreateSampleProductToTest().Result;
 
             //act 
             var actual = await _restClient.GetContentAsync<ResultStatus>($"{ActivatePath}/{resultStatus.Id}");
@@ -130,6 +131,30 @@ namespace Onion.PresentationApi.Tests.Integration
 
         }
 
+        [Fact]
+        public async void Should_Delete_Product()
+        {
+
+            //arrange
+            var resultStatus = CreateSampleProductToTest().Result;
+
+
+            //act 
+          
+            var actual = await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{resultStatus.Id}");
+
+            
+
+            //assert
+            actual.Error.Should().Be(ProductMessages.SuccessfullyDeleted); 
+            actual.IsOk.Should().BeTrue();
+
+
+            //act and assert 2
+            var DeletedFromTestActual = await _restClient.GetContentAsync<EditProductCommand>($"{ListPath}/{resultStatus.Id}");
+            DeletedFromTestActual.Should().BeNull();
+
+        }
 
 
         public async Task<ResultStatus> CreateSampleProductToTest()

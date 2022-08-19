@@ -80,6 +80,16 @@ namespace TestApi.Controllers
             return _ResultStatus;
         }
 
+        [HttpGet("Remove/{id}")]
+        public ResultStatus GetRemove(int id)
+        {
+            string Error = "";
+            _ResultStatus.IsOk = _IProductApplication.Delete(id, out Error);
+            _ResultStatus.Error = Error;
+
+            return _ResultStatus;
+
+        }
 
         [HttpGet("DeActivate/{id}")]
         public ResultStatus GetDeActivate(int id)
