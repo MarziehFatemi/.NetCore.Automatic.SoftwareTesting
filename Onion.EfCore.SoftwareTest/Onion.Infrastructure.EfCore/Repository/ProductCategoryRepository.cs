@@ -16,6 +16,10 @@ namespace Onion.Infrastructure.EfCore.Repository
         {
             _context.Add(productCategory); 
         }
+        public void Delete(ProductCategory productCategory)
+        {
+            _context.Remove(productCategory);
+        }
 
         public bool Exist(string categoryName)
         {

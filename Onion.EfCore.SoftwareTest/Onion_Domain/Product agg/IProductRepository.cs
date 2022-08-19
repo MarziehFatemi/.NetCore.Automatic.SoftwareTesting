@@ -11,6 +11,7 @@ namespace Onion.Domain.Product_agg
         Product Get(int id);
         List<Product> GetAll();
         void Create(Product product);
+        void Delete(Product product);
         bool Edit (int id, int UnitPrice, string Name, int CategoryId);
         void Activate(Product product);
         void DeActivate(Product product);

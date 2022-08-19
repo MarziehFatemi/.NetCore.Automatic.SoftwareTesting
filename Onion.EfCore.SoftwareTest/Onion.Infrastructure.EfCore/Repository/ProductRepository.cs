@@ -17,7 +17,10 @@ namespace Onion.Infrastructure.EfCore.Repository
         {
             _context.Add(product); 
         }
-
+        public void Delete (Product product)
+        {
+            _context.Remove(product);   
+        }
         public Product Get(int id)
         {
            

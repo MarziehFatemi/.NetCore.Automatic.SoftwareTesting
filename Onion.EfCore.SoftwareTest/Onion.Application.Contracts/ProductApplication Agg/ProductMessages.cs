@@ -14,5 +14,6 @@ namespace Onion.Application.Contracts.ProductApplication_Agg
         public static string SuccessfullEdit = "با موفقیت داده را ویرایش کرد";
         public static string SuccessfullActivation = "با موفقیت داده را فعال کرد";
         public static string SuccessfullDeActivation = "با موفقیت داده را غیر فعال کرد";
+        public static string  SuccessfullyDeleted = "Successfully Deleted"; 
     }
 }

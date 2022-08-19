@@ -137,5 +137,24 @@ namespace Onion.Application
             
             
         }
+
+        public bool Delete(int id, out string Error)
+        {
+            try
+            {
+                var product = _IProductRepository.Get(id);
+
+                _IProductRepository.Delete(product);
+                _IProductRepository.SaveChanges();
+                Error = Error = ProductMessages.SuccessfullyDeleted;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Error = e.Message.ToString();
+                return false;
+
+            }
+        }
     }
 }
