@@ -80,21 +80,19 @@ namespace Onion.PresentationApi.Tests.Integration
         {
             //arrange
 
-            var command = new CreateProductCategoryCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-            };
-               
-        
-           
-            //act
-            var ResultStatus = await _restClient.PostContentAsync<CreateProductCategoryCommand, ResultStatus>(CreatePath, command);
-            
+
+            string Name = Guid.NewGuid().ToString();
+
+            var ResultStatus = CreateSampleProductCategory(Name).Result;
 
             //assert
             ResultStatus.IsOk.Should().BeTrue();
             var actual = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ListPath}/{ResultStatus.Id}");
-            actual.Name.Equals(command.Name);
+            actual.Name.Equals(Name);
+
+            // tear down 
+            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{ResultStatus.Id}");
+
 
 
             // var ProductCategories = await _restClient.GetContentAsync<List<ProductCategoryViewModel>>(ListPath);
@@ -109,44 +107,30 @@ namespace Onion.PresentationApi.Tests.Integration
         public async void Should_Not_CreateRepeatitiveProductCategory_AndReturnMessage()
         {
             //arrange
-
-            var command1 = new CreateProductCategoryCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-            };
-            var command2 = new CreateProductCategoryCommand()
-            {
-                Name = command1.Name,
-            };
-
-
+            string Name = Guid.NewGuid().ToString();
 
             //act
-            var ResultStatus1 = await _restClient.PostContentAsync<CreateProductCategoryCommand, ResultStatus>(CreatePath, command1);
-            var ResultStatus2 = await _restClient.PostContentAsync<CreateProductCategoryCommand, ResultStatus>(CreatePath, command2);
+            var ResultStatus1 = CreateSampleProductCategory(Name).Result;
+            var ResultStatus2 = CreateSampleProductCategory(Name).Result;
 
 
             //assert
             ResultStatus2.IsOk.Should().BeFalse();
             ResultStatus2.Id.Should().Be(0);
             ResultStatus2.Error.Should().Be(ProductCategoryMessages.RepeatitiveNameError);
-           
-            // await _restClient.DeleteContentAsync($"{ListPath}/{id}");
+
+
+            // tear down 
+            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{ResultStatus1.Id}");
         }
 
         [Fact]
         public async void Should_Delete_Product()
         {
+            //arrange
+            string Name = Guid.NewGuid().ToString();    
+            var ResultStatus = CreateSampleProductCategory(Name).Result;
 
-            var command = new CreateProductCategoryCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-            };
-
-
-
-            //act
-            var ResultStatus = await _restClient.PostContentAsync<CreateProductCategoryCommand, ResultStatus>(CreatePath, command);
 
 
             //act 
@@ -165,6 +149,23 @@ namespace Onion.PresentationApi.Tests.Integration
             DeletedFromTestActual.Should().BeNull();
 
         }
+
+
+        public async Task<ResultStatus> CreateSampleProductCategory(string name)
+        {
+            var command = new CreateProductCategoryCommand()
+            {
+                Name = name,
+            };
+
+
+
+            //act
+            var ResultStatus = await _restClient.PostContentAsync<CreateProductCategoryCommand, ResultStatus>(CreatePath, command);
+
+            return ResultStatus;
+        }
+
 
 
     }
