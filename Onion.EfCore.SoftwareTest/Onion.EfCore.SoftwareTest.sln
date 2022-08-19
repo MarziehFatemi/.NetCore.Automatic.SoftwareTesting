@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Onion.Application.Tests.Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Onion.Application.Tests.Integrations", "Onion.Application.Tests.Integrations\Onion.Application.Tests.Integrations.csproj", "{EEE61693-2009-4E45-8EDC-F265AD97DB49}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presenration.Tests.E2E", "Presenration.Tests.E2E\Presenration.Tests.E2E.csproj", "{B9EDEC89-67BA-4DE9-8B79-87ED127EA6E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{EEE61693-2009-4E45-8EDC-F265AD97DB49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEE61693-2009-4E45-8EDC-F265AD97DB49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEE61693-2009-4E45-8EDC-F265AD97DB49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9EDEC89-67BA-4DE9-8B79-87ED127EA6E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9EDEC89-67BA-4DE9-8B79-87ED127EA6E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9EDEC89-67BA-4DE9-8B79-87ED127EA6E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9EDEC89-67BA-4DE9-8B79-87ED127EA6E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{35F6AEC1-7BE9-493E-AA4F-5C13074C213A} = {8DC8AC0F-3599-4A72-AEA8-41C4AADCD8E6}
 		{1E4AD93C-A61A-4465-BF27-EC6C88D0298F} = {8DC8AC0F-3599-4A72-AEA8-41C4AADCD8E6}
 		{EEE61693-2009-4E45-8EDC-F265AD97DB49} = {8DC8AC0F-3599-4A72-AEA8-41C4AADCD8E6}
+		{B9EDEC89-67BA-4DE9-8B79-87ED127EA6E4} = {8DC8AC0F-3599-4A72-AEA8-41C4AADCD8E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8C459840-9931-4CF2-8C41-45AA48C1A0D5}

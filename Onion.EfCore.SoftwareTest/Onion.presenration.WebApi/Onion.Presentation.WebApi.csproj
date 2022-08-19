@@ -19,6 +19,8 @@
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="Onion.PresentationApi.Tests.Integration" />
+		<InternalsVisibleTo Include="Presenration.Tests.E2E" />
+
 	</ItemGroup>
 	
 
