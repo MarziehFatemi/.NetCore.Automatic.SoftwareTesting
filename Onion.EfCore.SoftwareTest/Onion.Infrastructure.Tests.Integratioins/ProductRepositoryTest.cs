@@ -48,6 +48,27 @@ namespace Onion.Infrastructure.Tests.Integratioins
 
         }
 
+        [Fact]
+        public void Should_Delete_Product()
+        {
+            // arrange 
+            var Product = productTestBuilder.Build();
+
+            _productRepository.Create(Product);
+            _productRepository.SaveChanges();
+
+            var Expected = _productRepository.Get(Product.Id);
+
+            _productRepository.Delete(Expected);
+            _productRepository.SaveChanges();
+
+            var Actual = _productRepository.GetAll();
+            Actual.Should().NotContain(Expected);
+
+
+        }
+
+
 
         [Theory]
         [InlineData(2)]

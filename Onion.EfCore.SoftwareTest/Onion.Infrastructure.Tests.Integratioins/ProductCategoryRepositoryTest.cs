@@ -54,7 +54,24 @@ namespace Onion.Infrastructure.Tests.Integratioins
 
         }
 
-        
+        [Fact]
+        public void Should_Delete_ProductCategory()
+        {
+            productCategoryRepository.Create(productCategorySeed);
+            productCategoryRepository.SaveChanges();
+
+            var Expected = productCategoryRepository.Get(productCategorySeed.Id);
+
+            productCategoryRepository.Delete(Expected);
+            productCategoryRepository.SaveChanges();
+
+            var Actual = productCategoryRepository.GetAll();
+            Actual.Should().NotContain(Expected);
+
+
+        }
+
+
         [Theory]
         [InlineData(2)]
         public void Should_GetProductCategoryByIdWhenIdIsInRange(int id)

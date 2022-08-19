@@ -48,6 +48,19 @@ namespace Onion.Application.Tests.Unit
             _Repository.ReceivedWithAnyArgs().Create(default);
            
         }
+        [Fact]
+        public void Should_DeleteProductCategory()
+        {
+            string Error = "";
+
+            //act
+            _Service.Delete(2, out Error);
+
+            //assert
+
+            _Repository.ReceivedWithAnyArgs().Delete(default);
+
+        }
 
         private CreateProductCategoryCommand CreateSomeProductCategory()
         {

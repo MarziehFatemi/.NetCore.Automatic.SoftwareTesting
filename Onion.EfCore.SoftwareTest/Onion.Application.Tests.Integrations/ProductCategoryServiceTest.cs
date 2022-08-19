@@ -65,6 +65,32 @@ namespace Onion.Application.Tests.Integrations
 
 
         [Fact]
+        public void Should_Delete_ProductCategory()
+        {
+            var command = new CreateProductCategoryCommand()
+            {
+                Name = Guid.NewGuid().ToString(),
+            };
+
+            string Error = "";
+            int ToBeDeletedId = _Service.Create(command, out Error);
+
+            
+
+            //act 
+
+
+            bool IsOK =  _Service.Delete(ToBeDeletedId, out Error); 
+           
+            IsOK.Should().BeTrue();
+            Error.Should().Be(ProductCategoryMessages.SuccessfullyDeleted);
+
+
+
+
+        }
+
+        [Fact]
         public void Create_Should_ReturnError_WhenNameIsRepeatitive()
         {
             // arrange 
