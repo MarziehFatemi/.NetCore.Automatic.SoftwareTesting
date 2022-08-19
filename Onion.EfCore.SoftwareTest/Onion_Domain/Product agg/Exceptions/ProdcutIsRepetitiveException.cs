@@ -8,5 +8,10 @@ namespace Onion_Domain.Product_agg.Exceptions
 {
     public class ProdcutIsRepetitiveException: Exception
     {
+       
+        
+        public ProdcutIsRepetitiveException(string message)
+        : base(message) { }
+
     }
 }

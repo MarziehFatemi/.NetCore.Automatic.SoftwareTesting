@@ -7,6 +7,8 @@ namespace Onion.Infrastructure.EfCore.Repository
     public class ProductCategoryRepository : IProductCategoryRepository
     {
         Context _context;
+        private readonly string ProductCategoryIdIsInvalid = "Product Id Is Invalid";
+
         public ProductCategoryRepository(Context context)
         {
             _context = context;
@@ -29,12 +31,12 @@ namespace Onion.Infrastructure.EfCore.Repository
         public ProductCategory Get(int id)
         {
             if (id <= 0)
-                throw new ProductIdIsInvalidException();
+                throw new ProductIdIsInvalidException(ProductCategoryIdIsInvalid);
             else
             {
                 var productCategory = _context.productCategories.Find(id);
                 if (productCategory == null)
-                    throw new ProductIdIsInvalidException();
+                    throw new ProductIdIsInvalidException(ProductCategoryIdIsInvalid);
 
                 return productCategory;
             }
@@ -52,7 +54,7 @@ namespace Onion.Infrastructure.EfCore.Repository
             }
             catch
             {
-                throw new ProductIdIsInvalidException();
+                throw new ProductIdIsInvalidException(ProductCategoryIdIsInvalid);
             }
 
             

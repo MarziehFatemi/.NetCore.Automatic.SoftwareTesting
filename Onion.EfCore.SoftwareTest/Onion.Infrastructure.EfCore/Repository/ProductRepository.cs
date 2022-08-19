@@ -7,6 +7,7 @@ namespace Onion.Infrastructure.EfCore.Repository
     public class ProductRepository : IProductRepository
     {
         Context _context; 
+        private readonly string ProductIdIsInvalid = "Product Id Is Invalid";
         public ProductRepository(Context context)
         {
             _context = context;
@@ -30,7 +31,7 @@ namespace Onion.Infrastructure.EfCore.Repository
                 .FirstOrDefault(c => c.Id == id);
             if (product == null)
             {
-                throw new ProductIdIsInvalidException(); 
+                throw new ProductIdIsInvalidException(ProductIdIsInvalid); 
             }
                
             return product;
@@ -90,7 +91,7 @@ namespace Onion.Infrastructure.EfCore.Repository
             }
             catch 
             {
-                throw new ProductIdIsInvalidException();  
+                throw new ProductIdIsInvalidException(ProductIdIsInvalid);  
                 
             }
             

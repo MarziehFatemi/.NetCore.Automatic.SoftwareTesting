@@ -8,6 +8,8 @@ namespace Onion_Domain.Product_agg.Exceptions
 {
     public class ProductIdIsInvalidException : Exception
     {
+        public ProductIdIsInvalidException(string message)
+        : base(message) { }
 
     }
 }
