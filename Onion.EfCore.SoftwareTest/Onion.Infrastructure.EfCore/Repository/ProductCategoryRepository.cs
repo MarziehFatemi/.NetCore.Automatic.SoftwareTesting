@@ -1,5 +1,6 @@
 ﻿using Onion.Domain.Product_Category_agg;
 using Onion_Domain.Product_agg.Exceptions;
+using Onion_Domain.Product_Category_agg; 
 
 
 namespace Onion.Infrastructure.EfCore.Repository
@@ -67,13 +68,26 @@ namespace Onion.Infrastructure.EfCore.Repository
               
         }
 
-        ////public List<ProductCategory> Search(string name)
-        ////{
-        ////    return _context.productCategories
-        ////        .Where(c=> c.Name.Contains(name))
-        ////        .OrderBy(c => c.Id)
-        ////        .ToList(); 
-        ////}
+        public List<ProductCategory> Search(string name)
+        {
+            return _context.productCategories
+                .Where(c => c.Name.Contains(name))
+                .OrderBy(c => c.Id)
+                .ToList();
+        }
+        public ProductCategory GetBy(string name)
+        {
+            var productCategory =  _context.productCategories
+                .Where(c => c.Name == name).FirstOrDefault(); 
+            //if (productCategory == null)
+            //{ throw new ProductCategoryNameIsInvalidException("Product Category Name Is Invalid");
+            //}
+            //else
+            //{
+                return productCategory; 
+            //}
+                
+        }
 
         public List<ProductCategory> GetAll()
         {

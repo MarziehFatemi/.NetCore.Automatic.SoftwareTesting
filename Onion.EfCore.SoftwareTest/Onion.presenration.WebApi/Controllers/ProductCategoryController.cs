@@ -31,6 +31,13 @@ namespace TestApi.Controllers
             return _IProductCategoryApplication.GetEntity(id, out Error);
 
         }
+        [HttpGet("GetByName/{Name}")]
+        public ProductCategoryViewModel GetByName(string Name)
+        {
+           
+            return _IProductCategoryApplication.GetBy(Name);
+
+        }
 
         [HttpPost("EditProdcutCategory")]
         public ResultStatus PostEditProdcutCategory(EditProductCategoryCommand Command)

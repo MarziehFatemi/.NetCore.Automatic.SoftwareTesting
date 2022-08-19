@@ -14,6 +14,7 @@ namespace Onion.PresentationApi.Tests.Integration
         private string CreatePath = "/api/ProductCategory/CreateProductCategory";
         private string EditPath = "/api/ProductCategory/EditProdcutCategory";
         private string RemovePath = "/api/ProductCategory/Remove";
+        private string GetByNamePath = "/api/ProductCategory/GetByName";
 
         private RESTFulApiFactoryClient _restClient;
 
@@ -40,7 +41,7 @@ namespace Onion.PresentationApi.Tests.Integration
         }
 
         [Fact]
-        public async void Should_Return_ProductCategoryBy()
+        public async void Should_Return_ProductCategoryById()
         {
             //arrange
             string Name = Guid.NewGuid().ToString();
@@ -50,6 +51,29 @@ namespace Onion.PresentationApi.Tests.Integration
 
             //act 
             var actual = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ListPath}/{CreationResult.Id}");
+
+            //assert
+            actual.Id.Should().BeGreaterThan(0);
+            actual.Id.Should().Be(CreationResult.Id);
+            actual.Name.Should().Be(Name);
+
+            // tear down 
+            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{CreationResult.Id}");
+
+
+        }
+
+        [Fact]
+        public async void Should_Return_ProductCategoryModelByName()
+        {
+            //arrange
+            string Name = Guid.NewGuid().ToString();
+
+            var CreationResult = CreateSampleProductCategory(Name).Result;
+
+
+            //act 
+            var actual = await _restClient.GetContentAsync<ProductCategoryViewModel>($"{GetByNamePath}/{Name}");
 
             //assert
             actual.Id.Should().BeGreaterThan(0);

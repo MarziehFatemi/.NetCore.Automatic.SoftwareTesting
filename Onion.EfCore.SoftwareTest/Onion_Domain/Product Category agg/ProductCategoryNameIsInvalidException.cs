@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Onion_Domain.Product_Category_agg
 {
-    public class ProductCategoryIdIsInvalidException : Exception 
+    public class ProductCategoryNameIsInvalidException : Exception
     {
-        public ProductCategoryIdIsInvalidException(string message)
-        : base(message) { }
+        public ProductCategoryNameIsInvalidException(string? message) : base(message)
+        {
+        }
     }
 }
