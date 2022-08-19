@@ -46,7 +46,7 @@ namespace Onion.Test.Acceptance.NetCoreHosting
 
         private static void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(e.Data))
+           if (!string.IsNullOrEmpty(e.Data))
                 throw new Exception(e.Data);
         }
 
