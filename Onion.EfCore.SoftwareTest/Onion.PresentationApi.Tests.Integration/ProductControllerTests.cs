@@ -67,6 +67,10 @@ namespace Onion.PresentationApi.Tests.Integration
 
             //assert
             resultStatus.IsOk.Should().BeTrue();
+
+            // tear down 
+             _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{resultStatus.Id}");
+
         }
 
 
@@ -98,6 +102,10 @@ namespace Onion.PresentationApi.Tests.Integration
             ////actual.Name.Should().Be(UpdatedName);
 
 
+            // tear down 
+            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{resultStatus.Id}");
+
+
         }
 
 
@@ -115,6 +123,10 @@ namespace Onion.PresentationApi.Tests.Integration
             //assert
             actual.IsOk.Should().BeTrue();
 
+            // tear down 
+            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{resultStatus.Id}");
+
+
         }
 
         [Fact]
@@ -128,6 +140,9 @@ namespace Onion.PresentationApi.Tests.Integration
 
             //assert
             actual.IsOk.Should().BeTrue();
+
+            // tear down 
+            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{resultStatus.Id}");
 
         }
 
