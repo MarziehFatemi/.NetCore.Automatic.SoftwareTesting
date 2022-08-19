@@ -15,13 +15,18 @@ namespace Onion.PresentationApi.Tests.Integration
         private string ActivatePath = "/api/Product/Activate";
         private string RemovePath = "/api/Product/Remove";
 
+        
+
+
         private RESTFulApiFactoryClient _restClient;
+        CreateProductCommand SomeCreationCommand = new CreateProductCommand(); 
 
         public ProductControllerTests()
         {
             var applicationFactory = new WebApplicationFactory<Program>();
             var httpClient = applicationFactory.CreateClient();
             _restClient = new RESTFulApiFactoryClient(httpClient);
+            
 
 
         }
@@ -39,21 +44,29 @@ namespace Onion.PresentationApi.Tests.Integration
         }
 
 
-        [Theory]
-         ////[InlineData(0)]
-         ////[InlineData(-1)]
-         [InlineData(2)]
-        //[InlineData(100)]
-        public async void Should_Return_ProductBy(int Id)
+        [Fact]
+        public async void Should_Return_ProductBy()
         {
+            //arrange
+            var resultStatus = CreateSampleProductToTest().Result;
+
 
             //act 
-            var actual = await _restClient.GetContentAsync<EditProductCommand>($"{ListPath}/{Id}");
+            var actual = await _restClient.GetContentAsync<EditProductCommand>($"{ListPath}/{resultStatus.Id}");
 
-            
+
             // Assert
-            actual.Id.Should().BeGreaterThan(0);
             
+            actual.Id.Should().BeGreaterThan(0);
+            actual.Id.Should().Be(resultStatus.Id);
+            actual.Name.Should().Be(SomeCreationCommand.Name);
+            actual.CategoryId.Should().Be(SomeCreationCommand.CategoryId);
+            actual.UnitPrice.Should().Be(SomeCreationCommand.UnitPrice);
+
+            // tear down 
+            _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{resultStatus.Id}");
+
+
 
         }
 
@@ -79,11 +92,11 @@ namespace Onion.PresentationApi.Tests.Integration
         {
            
             //arrange
-            var resultStatus = CreateSampleProductToTest().Result;
+            var CreationResult = CreateSampleProductToTest().Result;
 
             var EditCommand = new EditProductCommand()
             {
-                Id = resultStatus.Id,
+                Id = CreationResult.Id,
 
                 // Editting name and price
                 CategoryId = 2,
@@ -93,17 +106,15 @@ namespace Onion.PresentationApi.Tests.Integration
 
 
             //act 
-            var ResultStatus = await _restClient.PostContentAsync<EditProductCommand, ResultStatus>(EditPath, EditCommand);
-            //var actual = await _restClient.GetContentAsync<EditProductCommand>($"{ListPath}/{Id}");
-
+            var EditResult = await _restClient.PostContentAsync<EditProductCommand, ResultStatus>(EditPath, EditCommand);
+           
             //assert
-            ResultStatus.IsOk.Should().BeTrue();
-            ////actual.Id.Should().Equals(Id);
-            ////actual.Name.Should().Be(UpdatedName);
-
+            EditResult.IsOk.Should().BeTrue();
+            EditResult.Id.Should().Equals(CreationResult.Id);
+            
 
             // tear down 
-            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{resultStatus.Id}");
+            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{CreationResult.Id}");
 
 
         }
@@ -174,7 +185,7 @@ namespace Onion.PresentationApi.Tests.Integration
 
         public async Task<ResultStatus> CreateSampleProductToTest()
         {
-            var command = new CreateProductCommand()
+             SomeCreationCommand = new CreateProductCommand()
             {
                 Name = Guid.NewGuid().ToString(),
                 CategoryId = 2, // there are some unavailable category Ids!!! 
@@ -185,10 +196,14 @@ namespace Onion.PresentationApi.Tests.Integration
 
 
             //act
-            var resultStatus = await _restClient.PostContentAsync<CreateProductCommand, ResultStatus>(CreatePath, command);
+            var resultStatus = await _restClient.PostContentAsync<CreateProductCommand, ResultStatus>(CreatePath, SomeCreationCommand);
 
+           
             return resultStatus; 
         }
+
+        
+
         //[Fact]
         //public async void Should_Not_CreateRepeatitiveProductCategory_AndReturnMessage()
         //{

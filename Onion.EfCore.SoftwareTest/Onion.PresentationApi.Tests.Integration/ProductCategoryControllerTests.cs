@@ -39,38 +39,58 @@ namespace Onion.PresentationApi.Tests.Integration
 
         }
 
-        [Theory]
-       // [InlineData(0)]
-       // [InlineData(-1)]
-        [InlineData(2)]
-       // [InlineData(100)]
-        public async void Should_Return_ProductCategoryBy(int Id)
+        [Fact]
+        public async void Should_Return_ProductCategoryBy()
         {
+            //arrange
+            string Name = Guid.NewGuid().ToString();
+
+            var CreationResult = CreateSampleProductCategory(Name).Result;
+
 
             //act 
-            var actual = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ListPath}/{Id}");
+            var actual = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ListPath}/{CreationResult.Id}");
 
             //assert
             actual.Id.Should().BeGreaterThan(0);
+            actual.Id.Should().Be(CreationResult.Id);
+            actual.Name.Should().Be(Name);
+
+            // tear down 
+            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{CreationResult.Id}");
+
 
         }
 
-        [Theory]
-        [InlineData(2, "Home Appliances")]
-        public async void Should_Edit_ProductCategory(int Id, string UpdatedName)
+        [Fact]
+        public async void Should_Edit_ProductCategory()
         {
-            // arrange 
-            EditProductCategoryCommand EditCommand = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ListPath}/{Id}");
-            EditCommand.Name = UpdatedName;
+            //arrange
+            string Name = Guid.NewGuid().ToString();
+
+            var CreationResult = CreateSampleProductCategory(Name).Result;
+
+            var EditCommand = new EditProductCategoryCommand()
+            {
+                Id = CreationResult.Id,
+                Name = Guid.NewGuid().ToString(),
+            };
+        
 
             //act 
-            var ResultStatus = await _restClient.PostContentAsync<EditProductCategoryCommand,ResultStatus>(EditPath, EditCommand);
-            var actual = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ListPath}/{Id}");
+            var EditResult = await _restClient.PostContentAsync<EditProductCategoryCommand,ResultStatus>(EditPath, EditCommand);
+            
+            var EditedEntity = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ListPath}/{CreationResult.Id}");
 
             //assert
-            ResultStatus.IsOk.Should().BeTrue();
-            actual.Id.Should().Equals(Id);
-            actual.Name.Should().Be(UpdatedName);
+            EditResult.IsOk.Should().BeTrue();
+            EditedEntity.Id.Should().Equals(CreationResult.Id);
+            EditedEntity.Name.Should().Be(EditCommand.Name);
+
+
+            // tear down 
+            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{CreationResult.Id}");
+
 
 
         }
@@ -79,8 +99,6 @@ namespace Onion.PresentationApi.Tests.Integration
         public async void Should_CreateNewProductCategory()
         {
             //arrange
-
-
             string Name = Guid.NewGuid().ToString();
 
             var ResultStatus = CreateSampleProductCategory(Name).Result;
