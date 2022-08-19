@@ -91,7 +91,7 @@ namespace Onion.Infrastructure.EfCore.Repository
 
         public List<ProductCategory> GetAll()
         {
-            return _context.productCategories.ToList(); 
+            return _context.productCategories.OrderByDescending(x=> x.Id).ToList(); 
         }
     }
 }
