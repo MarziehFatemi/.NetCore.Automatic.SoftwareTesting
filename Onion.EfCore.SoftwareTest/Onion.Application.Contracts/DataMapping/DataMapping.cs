@@ -63,6 +63,15 @@ namespace Onion.Application.Contracts.DataMapping
             return productCategoryViewModel;
         }
 
+        public static ProductViewModel Prod2ProdView(Product product)
+        {
+            ProductViewModel productViewModel =
+            new ProductViewModel(product.Id, product.UintPrice, product.Name, product.IsRemoved,
+           product.Category.Name, product.CreationDate.ToString()); 
+            
+
+            return productViewModel;
+        }
 
         public static EditProductCommand Product2EditProduct ( Product product)
         {

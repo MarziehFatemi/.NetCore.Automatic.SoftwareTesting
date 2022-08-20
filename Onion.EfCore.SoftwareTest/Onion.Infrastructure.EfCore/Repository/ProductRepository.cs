@@ -58,6 +58,25 @@ namespace Onion.Infrastructure.EfCore.Repository
                 .ToList();
          
         }
+
+        public List<Product> ExactSearch(string name)
+        {
+            return _context.products
+                .Where(c => c.Name == name)
+                .OrderBy(c => c.Id)
+                .ToList();
+        }
+        public Product GetBy(string name)
+        {
+            var product = _context.products
+                .Where(c => c.Name == name).FirstOrDefault();
+
+            return product;
+
+
+        }
+
+
         public List<Product> GetAll()
         {
             return _context.products

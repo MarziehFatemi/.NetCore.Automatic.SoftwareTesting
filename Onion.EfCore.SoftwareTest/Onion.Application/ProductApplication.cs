@@ -112,6 +112,21 @@ namespace Onion.Application
 
         }
 
+        public ProductViewModel GetBy(string name)
+        {
+
+            return DataMapping.Prod2ProdView(_IProductRepository.GetBy(name));
+
+
+        }
+
+        public List<ProductViewModel> ExactSearch(string name)
+        {
+            return DataMapping.ProductList2ProductViewModelList(_IProductRepository.ExactSearch(name));
+
+
+        }
+
         public List<ProductViewModel> GetAll()
         {
             List<Product> products = _IProductRepository.GetAll(); 

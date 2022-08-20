@@ -45,6 +45,22 @@ namespace TestApi.Controllers
 
         }
 
+        [HttpGet("GetByName/{Name}")]
+        public ProductViewModel GetByName(string Name)
+        {
+
+            return _IProductApplication.GetBy(Name);
+
+        }
+        [HttpGet("ExactSearch/{Name}")]
+        public List<ProductViewModel> GetExactSearch(string Name)
+        {
+
+            return _IProductApplication.ExactSearch(Name);
+
+        }
+
+
         [HttpPost("CreateProduct")]
         public ResultStatus PostCreateProduct(CreateProductCommand Command)
         {
