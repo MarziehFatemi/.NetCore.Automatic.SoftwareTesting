@@ -87,12 +87,12 @@ namespace Onion.Application
 
 
         ////}
-        ////public ProductCategoryViewModel ExactSearch(string name)
-        ////{
-        ////    return DataMapping.ProdCat2ProdCatView(ProductCatecoryRepository.ExactSearchby(name));
+        public List<ProductCategoryViewModel> ExactSearch(string name)
+        {
+            return DataMapping.ProdCatList2ProdCatViewList(ProductCatecoryRepository.ExactSearch(name));
 
 
-        ////}
+        }
 
         public List<ProductCategoryViewModel> GetAll()
         {

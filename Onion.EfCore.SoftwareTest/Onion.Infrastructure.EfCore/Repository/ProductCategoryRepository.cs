@@ -75,17 +75,20 @@ namespace Onion.Infrastructure.EfCore.Repository
                 .OrderBy(c => c.Id)
                 .ToList();
         }
+        public List<ProductCategory> ExactSearch(string name)
+        {
+            return _context.productCategories
+                .Where(c => c.Name == name)
+                .OrderBy(c => c.Id)
+                .ToList();
+        }
         public ProductCategory GetBy(string name)
         {
             var productCategory =  _context.productCategories
                 .Where(c => c.Name == name).FirstOrDefault(); 
-            //if (productCategory == null)
-            //{ throw new ProductCategoryNameIsInvalidException("Product Category Name Is Invalid");
-            //}
-            //else
-            //{
+            
                 return productCategory; 
-            //}
+          
                 
         }
 

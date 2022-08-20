@@ -38,6 +38,13 @@ namespace TestApi.Controllers
             return _IProductCategoryApplication.GetBy(Name);
 
         }
+        [HttpGet("ExactSearch/{Name}")]
+        public List<ProductCategoryViewModel> GetExactSearch(string Name)
+        {
+
+            return _IProductCategoryApplication.ExactSearch(Name);
+
+        }
 
         [HttpPost("EditProdcutCategory")]
         public ResultStatus PostEditProdcutCategory(EditProductCategoryCommand Command)

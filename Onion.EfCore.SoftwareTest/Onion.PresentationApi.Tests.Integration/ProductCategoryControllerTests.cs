@@ -2,6 +2,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Onion.Application.Contracts;
 using Onion.Application.Contracts.ProductCategoryApplicationAgg;
+using Onion_Domain.Product_Category_agg;
 using RESTFulSense.Clients;
 using TestApi.Controllers;
 
@@ -10,12 +11,7 @@ namespace Onion.PresentationApi.Tests.Integration
     public class ProductCategoryControllerTests
     {
 
-        private string ListPath = "/api/ProductCategory";
-        private string CreatePath = "/api/ProductCategory/CreateProductCategory";
-        private string EditPath = "/api/ProductCategory/EditProdcutCategory";
-        private string RemovePath = "/api/ProductCategory/Remove";
-        private string GetByNamePath = "/api/ProductCategory/GetByName";
-
+        
         private RESTFulApiFactoryClient _restClient;
 
         public ProductCategoryControllerTests()
@@ -32,7 +28,7 @@ namespace Onion.PresentationApi.Tests.Integration
         {
             
             //act 
-            var actual = await _restClient.GetContentAsync<List<ProductCategoryViewModel>>(ListPath);
+            var actual = await _restClient.GetContentAsync<List<ProductCategoryViewModel>>(ProductCategoryConstants.ListPath);
 
             //assert
             actual.Should().HaveCountGreaterOrEqualTo(0);
@@ -50,7 +46,7 @@ namespace Onion.PresentationApi.Tests.Integration
 
 
             //act 
-            var actual = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ListPath}/{CreationResult.Id}");
+            var actual = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ProductCategoryConstants.ListPath}/{CreationResult.Id}");
 
             //assert
             actual.Id.Should().BeGreaterThan(0);
@@ -58,7 +54,7 @@ namespace Onion.PresentationApi.Tests.Integration
             actual.Name.Should().Be(Name);
 
             // tear down 
-            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{CreationResult.Id}");
+            await _restClient.GetContentAsync<ResultStatus>($"{ProductCategoryConstants.RemovePath}/{CreationResult.Id}");
 
 
         }
@@ -73,7 +69,7 @@ namespace Onion.PresentationApi.Tests.Integration
 
 
             //act 
-            var actual = await _restClient.GetContentAsync<ProductCategoryViewModel>($"{GetByNamePath}/{Name}");
+            var actual = await _restClient.GetContentAsync<ProductCategoryViewModel>($"{ProductCategoryConstants.GetByNamePath}/{Name}");
 
             //assert
             actual.Id.Should().BeGreaterThan(0);
@@ -81,10 +77,35 @@ namespace Onion.PresentationApi.Tests.Integration
             actual.Name.Should().Be(Name);
 
             // tear down 
-            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{CreationResult.Id}");
+            await _restClient.GetContentAsync<ResultStatus>($"{ProductCategoryConstants.RemovePath}/{CreationResult.Id}");
 
 
         }
+
+        [Fact]
+        public async void Should_Return_ProductCategoryModelListByName()
+        {
+            //arrange
+            string Name = Guid.NewGuid().ToString();
+
+            var CreationResult = CreateSampleProductCategory(Name).Result;
+
+
+            //act 
+            var actual = await _restClient.GetContentAsync<List<ProductCategoryViewModel>>($"{ProductCategoryConstants.ExactSearchPath}/{Name}");
+
+            //assert
+            actual.Should().BeOfType<List<ProductCategoryViewModel>>();
+            actual.Count.Should().Be(1);
+            actual[0].Id.Should().Be(CreationResult.Id);
+            actual[0].Name.Should().Be(Name);
+
+            // tear down 
+            await _restClient.GetContentAsync<ResultStatus>($"{ProductCategoryConstants.RemovePath}/{CreationResult.Id}");
+
+
+        }
+
 
         [Fact]
         public async void Should_Edit_ProductCategory()
@@ -102,9 +123,9 @@ namespace Onion.PresentationApi.Tests.Integration
         
 
             //act 
-            var EditResult = await _restClient.PostContentAsync<EditProductCategoryCommand,ResultStatus>(EditPath, EditCommand);
+            var EditResult = await _restClient.PostContentAsync<EditProductCategoryCommand,ResultStatus>(ProductCategoryConstants.EditPath, EditCommand);
             
-            var EditedEntity = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ListPath}/{CreationResult.Id}");
+            var EditedEntity = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ProductCategoryConstants.ListPath}/{CreationResult.Id}");
 
             //assert
             EditResult.IsOk.Should().BeTrue();
@@ -113,7 +134,7 @@ namespace Onion.PresentationApi.Tests.Integration
 
 
             // tear down 
-            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{CreationResult.Id}");
+            await _restClient.GetContentAsync<ResultStatus>($"{ProductCategoryConstants.RemovePath}/{CreationResult.Id}");
 
 
 
@@ -129,11 +150,11 @@ namespace Onion.PresentationApi.Tests.Integration
 
             //assert
             ResultStatus.IsOk.Should().BeTrue();
-            var actual = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ListPath}/{ResultStatus.Id}");
+            var actual = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ProductCategoryConstants.ListPath}/{ResultStatus.Id}");
             actual.Name.Equals(Name);
 
             // tear down 
-            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{ResultStatus.Id}");
+            await _restClient.GetContentAsync<ResultStatus>($"{ProductCategoryConstants.RemovePath}/{ResultStatus.Id}");
 
 
 
@@ -163,7 +184,7 @@ namespace Onion.PresentationApi.Tests.Integration
 
 
             // tear down 
-            await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{ResultStatus1.Id}");
+            await _restClient.GetContentAsync<ResultStatus>($"{ProductCategoryConstants.RemovePath}/{ResultStatus1.Id}");
         }
 
         [Fact]
@@ -177,7 +198,7 @@ namespace Onion.PresentationApi.Tests.Integration
 
             //act 
 
-            var actual = await _restClient.GetContentAsync<ResultStatus>($"{RemovePath}/{ResultStatus.Id}");
+            var actual = await _restClient.GetContentAsync<ResultStatus>($"{ProductCategoryConstants.RemovePath}/{ResultStatus.Id}");
 
 
 
@@ -187,7 +208,7 @@ namespace Onion.PresentationApi.Tests.Integration
 
 
             //act and assert 2
-            var DeletedFromTestActual = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ListPath}/{ResultStatus.Id}");
+            var DeletedFromTestActual = await _restClient.GetContentAsync<EditProductCategoryCommand>($"{ProductCategoryConstants.ListPath}/{ResultStatus.Id}");
             DeletedFromTestActual.Should().BeNull();
 
         }
@@ -203,7 +224,7 @@ namespace Onion.PresentationApi.Tests.Integration
 
 
             //act
-            var ResultStatus = await _restClient.PostContentAsync<CreateProductCategoryCommand, ResultStatus>(CreatePath, command);
+            var ResultStatus = await _restClient.PostContentAsync<CreateProductCategoryCommand, ResultStatus>(ProductCategoryConstants.CreatePath, command);
 
             return ResultStatus;
         }

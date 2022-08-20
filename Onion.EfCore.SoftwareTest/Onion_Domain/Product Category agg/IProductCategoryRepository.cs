@@ -12,8 +12,9 @@ namespace Onion.Domain.Product_Category_agg
         void Delete(ProductCategory productCategory);
         bool Edit(int id, string Name); 
         void SaveChanges();
-         ProductCategory GetBy(string name);
-       // List<ProductCategory> Search(string name);
+        ProductCategory GetBy(string name);
+        List<ProductCategory> ExactSearch(string name);
+        // List<ProductCategory> Search(string name);
 
     }
 }

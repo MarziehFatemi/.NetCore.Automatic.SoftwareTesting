@@ -13,7 +13,7 @@ namespace Onion.Application.Contracts
         int Create(CreateProductCategoryCommand Command, out string Error);
         bool Edit (EditProductCategoryCommand Command, out string Error);
         ProductCategoryViewModel GetBy(string name);
-       //  List<ProductCategoryViewModel> Search(string name);
+        List<ProductCategoryViewModel> ExactSearch(string name);
         List<ProductCategoryViewModel> GetAll();
         EditProductCategoryCommand GetEntity(int Id, out string Error);
         bool Delete(int id, out string Error);
