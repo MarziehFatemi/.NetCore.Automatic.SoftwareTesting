@@ -72,15 +72,16 @@ namespace Onion.Infrastructure.Tests.Integratioins
         }
 
 
-        [Theory]
-        [InlineData(2)]
-        public void Should_GetProductCategoryByIdWhenIdIsInRange(int id)
+        [Fact]
+        public void Should_GetProductCategoryByIdWhenIdIsInRange()
         {
+            productCategoryRepository.Create(productCategorySeed);
+            productCategoryRepository.SaveChanges();
 
-            var Actual =  productCategoryRepository.Get(id);
+            var Actual =  productCategoryRepository.Get(productCategorySeed.Id);
 
 
-            Actual.Id.Should().Be(id);
+            Actual.Id.Should().Be(productCategorySeed.Id);
         }
 
         [Theory]

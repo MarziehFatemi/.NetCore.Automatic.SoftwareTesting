@@ -2,6 +2,7 @@
 
 using FluentAssertions;
 using Onion.Application.Contracts.ProductApplication_Agg;
+using Onion.Domain.Product_Category_agg;
 using Onion.Infrastructure.EfCore.Repository;
 using Onion.Infrastructure.Tests.Integratioins;
 
@@ -26,6 +27,14 @@ namespace Onion.Application.Tests.Integrations
         [Fact]
         public void Should_Return_All_ProductCategories()
         {
+            // arrange 
+            string Error = "";
+            string Name = Guid.NewGuid().ToString();
+
+            //act 
+
+            int ActualId = CreateSomeProduct(Name, out Error);
+
 
             // act 
             var Actual = _Service.GetAll();
@@ -40,7 +49,7 @@ namespace Onion.Application.Tests.Integrations
         {
             // arrange 
               string Error = "";
-            string Name = Guid.NewGuid().ToString();
+            string Name = "SomeName"; //  Guid.NewGuid().ToString();
 
             //act 
 
@@ -61,7 +70,7 @@ namespace Onion.Application.Tests.Integrations
         }
 
         [Fact]
-        public void Should_Delete_ProductCategory()
+        public void Should_Delete_Product()
         {
             string Name = Guid.NewGuid().ToString();
             string Error = "";
@@ -100,11 +109,12 @@ namespace Onion.Application.Tests.Integrations
 
         public int CreateSomeProduct(string SomeName, out string Error)
         {
+
             // arrange 
              CreateCommand = new CreateProductCommand
             {
                 Name = SomeName,
-                CategoryId = 2,
+                CategoryId = ProductCategorySeed.ProductCategorySeedId,
                 UnitPrice = 110,
 
             };
@@ -117,26 +127,41 @@ namespace Onion.Application.Tests.Integrations
 
 
 
-        [Theory]
-        [InlineData(2)]
-        public void Should_GetProductByIdWhenIdIsInRange(int id)
+        [Fact]
+        public void Should_GetProductByIdWhenIdIsInRange()
         {
+            // arrange 
             string Error = "";
+            string Name = Guid.NewGuid().ToString();
 
-            var Actual = _Service.GetBy(id, out Error);
+            //act 
+
+            int ActualId = CreateSomeProduct(Name, out Error);
+
+             Error = "";
+
+            var Actual = _Service.GetBy(ActualId, out Error);
 
 
-            Actual.Id.Should().Be(id);
+            Actual.Id.Should().Be(ActualId);
             Error.Should().Be(ProductMessages.SuccessfullGet);
         }
 
-        [Theory]
-        [InlineData(1000)]
-        public void Should_ReturnNull_WhenCanNotFindOr_IdIsOutOfRange(int id)
+        [Fact]
+        public void Should_ReturnNull_WhenCanNotFindOr_IdIsOutOfRange()
         {
-
+            // arrange 
             string Error = "";
-            var Actual = _Service.GetBy(id, out Error);
+            string Name = Guid.NewGuid().ToString();
+
+            //act 
+
+            int ActualId = CreateSomeProduct(Name, out Error);
+
+
+            _Service.Delete(ActualId, out Error);
+             Error = "";
+            var Actual = _Service.GetBy(ActualId, out Error);
 
 
             Actual.Should().BeNull();

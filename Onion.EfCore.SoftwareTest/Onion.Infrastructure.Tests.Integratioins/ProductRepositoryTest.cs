@@ -70,15 +70,20 @@ namespace Onion.Infrastructure.Tests.Integratioins
 
 
 
-        [Theory]
-        [InlineData(2)]
-        public void Should_GetProductByIdWhenIdIsInRange(int id)
+        [Fact]
+        public void Should_GetProductByIdWhenIdIsInRange()
         {
+            // arrange 
+            var Product = productTestBuilder.Build();
 
-            var Actual = _productRepository.Get(id);
+            _productRepository.Create(Product);
+            _productRepository.SaveChanges();
 
 
-            Actual.Id.Should().Be(id);
+            var Actual = _productRepository.Get(Product.Id);
+
+
+            Actual.Id.Should().Be(Product.Id);
         }
 
         [Theory]

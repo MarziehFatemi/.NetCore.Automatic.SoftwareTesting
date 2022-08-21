@@ -59,11 +59,12 @@ namespace Onion.Infrastructure.EfCore.Repository
          
         }
 
-        public List<Product> ExactSearch(string name)
+        public List<Product> ExactSearch(string name, string Category)
         {
             return _context.products
-                .Where(c => c.Name == name)
-                .OrderBy(c => c.Id)
+                .Include(c => c.Category)
+                .Where(c => c.Name == name && c.Category.Name == Category)
+                .OrderByDescending(c => c.Id)
                 .ToList();
         }
         public Product GetBy(string name)

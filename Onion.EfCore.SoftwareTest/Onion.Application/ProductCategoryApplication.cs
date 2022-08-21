@@ -75,8 +75,11 @@ namespace Onion.Application
 
         public ProductCategoryViewModel GetBy(string name)
         {
-           
-           return DataMapping.ProdCat2ProdCatView(ProductCatecoryRepository.GetBy(name));
+            var productCategory = ProductCatecoryRepository.GetBy(name);
+            if (productCategory != null)
+            { return DataMapping.ProdCat2ProdCatView(productCategory); }
+            return
+                null;
            
 
         }

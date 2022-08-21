@@ -12,7 +12,7 @@ namespace Onion.Application.Tests.Integrations
 
             private readonly ProductCategoryRepository _Repository;
             private readonly ProductCategoryApplication _Service;
-            private ProductCategory _Seed = new ProductCategory("Industrial Machine");
+           // private ProductCategory _Seed = new ProductCategory("Industrial Machine");
 
         public ProductCategoryServiceTest(RealDatabaseFixture databaseFixture)
         {
@@ -26,40 +26,50 @@ namespace Onion.Application.Tests.Integrations
             [Fact]
             public void Should_Return_All_ProductCategories()
             {
+            // arrange
+            string name = Guid.NewGuid().ToString();
+            string Error = "";
 
-                // act 
-                var Actual = _Service.GetAll();
+            // act 
+            int ActualId = CreateSomeProductCategory(name, out Error);
 
-                // assert 
-                Actual.Should().HaveCountGreaterThanOrEqualTo(1);
-            }
+            // assert
+
+            // act 
+            var Actual = _Service.GetAll();
+
+            // assert 
+            Actual.Should().HaveCountGreaterThanOrEqualTo(1);
+
+            // teardown 
+            _Service.Delete(ActualId, out Error);
+
+        }
 
 
             [Fact]
             public void Should_Create_ProductCategory()
             {
-            // arrange 
-            var command = new CreateProductCategoryCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-            };
-           
+            // arrange
+            string name = Guid.NewGuid().ToString();
             string Error = "";
 
-            //act 
-
-            int ActualId = _Service.Create(command, out Error);
-
+            // act 
+            int ActualId = CreateSomeProductCategory(name, out Error); 
+            
+            // assert
+            
             ActualId.Should().BeGreaterThan(0);
             Error.Should().Be(ProductCategoryMessages.SuccessfullCreation);
 
             var ActualEntity = _Service.GetEntity(ActualId,out string Error2);
 
-            ActualEntity.Name = command.Name; 
-            ////var Actual = _Service.GetAll();
+            ActualEntity.Name = name;
 
-            ////// assert 
-            ////Actual.Should().Contain(Expected);
+
+            // teardown  no tear down for seed 
+           // _Service.Delete(ActualId, out Error);
+
 
         }
 
@@ -67,20 +77,18 @@ namespace Onion.Application.Tests.Integrations
         [Fact]
         public void Should_Delete_ProductCategory()
         {
-            var command = new CreateProductCategoryCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-            };
-
+            // arrange
+            string name = Guid.NewGuid().ToString();
             string Error = "";
-            int ToBeDeletedId = _Service.Create(command, out Error);
 
-            
+            // act 
+            int ActualId = CreateSomeProductCategory(name, out Error);
+
 
             //act 
 
 
-            bool IsOK =  _Service.Delete(ToBeDeletedId, out Error); 
+            bool IsOK =  _Service.Delete(ActualId, out Error); 
            
             IsOK.Should().BeTrue();
             Error.Should().Be(ProductCategoryMessages.SuccessfullyDeleted);
@@ -93,47 +101,61 @@ namespace Onion.Application.Tests.Integrations
         [Fact]
         public void Create_Should_ReturnError_WhenNameIsRepeatitive()
         {
-            // arrange 
-            var command = new CreateProductCategoryCommand()
-            {
-                Name = _Seed.Name,
-            };
+            // arrange
+            string name = Guid.NewGuid().ToString();
             string Error = "";
+            int ActualId0 = CreateSomeProductCategory(name, out Error);
 
-            //act 
+            // act 
+            int ActualId = CreateSomeProductCategory(name, out Error);
 
-             _Service.Create(command, out Error);
-
-            int ActualId= _Service.Create(command, out Error);
 
             ActualId.Should().Be(0);
             Error.Should().Be(ProductCategoryMessages.RepeatitiveNameError);
+
+            // teardown 
+            _Service.Delete(ActualId0, out Error);
 
         }
 
 
 
-
-        [Theory]
-            [InlineData(2)]
-            public void Should_GetProductCategoryByIdWhenIdIsInRange(int id)
+        [Fact]
+            public void Should_GetProductCategoryByIdWhenIdIsInRange()
             {
+            // arrange
+            string name = Guid.NewGuid().ToString();
             string Error = "";
+            int ActualId = CreateSomeProductCategory(name, out Error);
 
-            var Actual = _Service.GetEntity(id, out Error );
+
+             Error = "";
+            // Act
+
+            var Actual = _Service.GetEntity(ActualId, out Error );
 
 
-            Actual.Id.Should().Be(id);
-            Error.Should().Be(ProductCategoryMessages.SuccessfullGet); 
-            }
+            Actual.Id.Should().Be(ActualId);
+            Error.Should().Be(ProductCategoryMessages.SuccessfullGet);
 
-            [Theory]
-            [InlineData(1000)]
-            public void Should_ReturnNull_WhenCanNotFindOr_IdIsOutOfRange(int id)
+            // teardown 
+            _Service.Delete(ActualId, out Error);
+
+        }
+
+            [Fact]
+            public void Should_ReturnNull_WhenCanNotFindOr_IdIsOutOfRange()
             {
+            // arrange
+            string name = Guid.NewGuid().ToString();
+            string Error = "";
+            int ActualId = CreateSomeProductCategory(name, out Error);
+            // teardown 
+            _Service.Delete(ActualId, out Error);
 
-                string Error = "";
-                var Actual =  _Service.GetEntity(id, out Error);
+
+            Error = "";
+                var Actual =  _Service.GetEntity(ActualId, out Error);
 
 
                 Actual.Should().BeNull();
@@ -160,14 +182,11 @@ namespace Onion.Application.Tests.Integrations
             public void Should_Edit_ProductCategory(string ExpectedName)
             {
             // arrange 
-            var Createcommand = new CreateProductCategoryCommand()
-            {
-                Name = Guid.NewGuid().ToString(),
-            };
-
+            // arrange
+            string name = Guid.NewGuid().ToString();
             string Error = "";
+            int ActualId = CreateSomeProductCategory(name, out Error);
 
-            int ActualId= _Service.Create(Createcommand, out Error);
 
             var Editcommand = new EditProductCategoryCommand()
             {
@@ -187,8 +206,10 @@ namespace Onion.Application.Tests.Integrations
             Actual.Id.Should().Be(Editcommand.Id);
             Actual.Name.Should().Be(Editcommand.Name);
 
+            // teardown 
+            _Service.Delete(ActualId, out Error);
 
-            }
+        }
 
 
 
@@ -208,11 +229,29 @@ namespace Onion.Application.Tests.Integrations
 
 
             Actual.Should().BeFalse();
-           
 
 
-            }
+            
 
         }
+
+
+        public int CreateSomeProductCategory(string name, out string Error )
+        {
+            // arrange 
+            var command = new CreateProductCategoryCommand()
+            {
+                Name = name, 
+            };
+
+            //act 
+
+            int ActualId = _Service.Create(command, out Error);
+             return ActualId; 
+
+
+        }
+
+    }
     
 }

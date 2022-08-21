@@ -1,4 +1,5 @@
 ﻿using Onion.Domain.Product_agg;
+using Onion.Domain.Product_Category_agg;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Onion.Domain.Tests.ProductTestAggs
     {
        public int UintPrice { get; private set; } = 1100;
        public string Name { get; private set; } = "Think and  grow rich";
-       public int CategoryId { get; private set; } = 2;
+       public int CategoryId { get; private set; } = ProductCategorySeed.ProductCategorySeedId;
 
         public ProductTestBuilder WithUnitPrice (int unitPrice)
         {

@@ -18,7 +18,7 @@ namespace Onion.Domain.Product_agg
         bool Exist (string name, int categoryId);
         void SaveChanges();
         Product GetBy(string name);
-        List<Product> ExactSearch(string name);
+        List<Product> ExactSearch(string name, string Category);
 
         List<Product> Search(string name);
 

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Onion.Application.Contracts.ProductApplication_Agg;
 using TestApi.Controllers;
 using Onion.Presentation.WebApi.Controllers;
+using Onion.Domain.Product_Category_agg;
 
 namespace Onion.PresentationApi.Tests.Integration
 {
@@ -94,7 +95,7 @@ namespace Onion.PresentationApi.Tests.Integration
                 Id = CreationResult.Id,
 
                 // Editting name and price
-                CategoryId = 2,
+                CategoryId = ProductCategorySeed.ProductCategorySeedId,
                 UnitPrice = new Random().Next(1, 2000),
                 Name = Guid.NewGuid().ToString(),
             }; 
@@ -183,7 +184,7 @@ namespace Onion.PresentationApi.Tests.Integration
              SomeCreationCommand = new CreateProductCommand()
             {
                 Name = Guid.NewGuid().ToString(),
-                CategoryId = 2, // there are some unavailable category Ids!!! 
+                CategoryId = 8, // there are some unavailable category Ids!!! 
                 UnitPrice = 110,
 
             };

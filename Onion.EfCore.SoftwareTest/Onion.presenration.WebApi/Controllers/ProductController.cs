@@ -52,11 +52,11 @@ namespace TestApi.Controllers
             return _IProductApplication.GetBy(Name);
 
         }
-        [HttpGet("ExactSearch/{Name}")]
-        public List<ProductViewModel> GetExactSearch(string Name)
+        [HttpGet("ExactSearch/{Name}/{CategoryName}")]
+        public List<ProductViewModel> GetExactSearch(string Name,string CategoryName)
         {
 
-            return _IProductApplication.ExactSearch(Name);
+            return _IProductApplication.ExactSearch(Name,CategoryName);
 
         }
 

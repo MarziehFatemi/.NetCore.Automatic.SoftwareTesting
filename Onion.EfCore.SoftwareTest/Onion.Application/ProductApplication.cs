@@ -120,9 +120,9 @@ namespace Onion.Application
 
         }
 
-        public List<ProductViewModel> ExactSearch(string name)
+        public List<ProductViewModel> ExactSearch(string name, string Category)
         {
-            return DataMapping.ProductList2ProductViewModelList(_IProductRepository.ExactSearch(name));
+            return DataMapping.ProductList2ProductViewModelList(_IProductRepository.ExactSearch(name,  Category));
 
 
         }
