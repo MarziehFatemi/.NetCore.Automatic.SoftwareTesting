@@ -23,6 +23,7 @@
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="Onion.PresentationApi.Tests.Integration" />
+		<InternalsVisibleTo Include="PresenrationTestsE2E" />
 		<InternalsVisibleTo Include="SpectFlowTestE2E" />
 
 	</ItemGroup>
