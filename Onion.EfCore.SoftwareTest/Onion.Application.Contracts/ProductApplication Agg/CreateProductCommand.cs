@@ -24,7 +24,7 @@ namespace Onion.Application.Contracts.ProductApplication_Agg
 
         [DisplayName("گروه محصول")]
         [Required(ErrorMessage = "گروه محصول اجباری است")]
-        [Range(1,100,ErrorMessage ="گروه محصول را درست انتخاب کنید محدودیت 100 محصول")]
+        [Range(1,10000,ErrorMessage ="گروه محصول را درست انتخاب کنید محدودیت 10000 محصول")]
         [JsonProperty(PropertyName = "categoryId")]
         public int CategoryId{ get; set; }
        

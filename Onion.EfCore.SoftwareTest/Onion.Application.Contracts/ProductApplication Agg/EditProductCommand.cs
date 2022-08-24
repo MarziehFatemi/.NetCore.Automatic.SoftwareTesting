@@ -19,5 +19,8 @@ namespace Onion.Application.Contracts.ProductApplication_Agg
             UnitPrice = unitPrice;
             CategoryId = categoryId; 
         }
+
+       
     }
 }
+
